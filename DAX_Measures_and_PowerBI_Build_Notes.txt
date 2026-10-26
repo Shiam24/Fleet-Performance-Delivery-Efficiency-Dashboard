@@ -1,0 +1,36 @@
+FLEET PERFORMANCE DASHBOARD — DAX MEASURES
+Create these measures after loading Trip_Data and Vehicle_Master into Power BI.
+
+Total Trips = COUNTROWS(Trip_Data)
+
+On-Time Trips =
+CALCULATE(
+    COUNTROWS(Trip_Data),
+    Trip_Data[Delivery_Status] = "On-Time"
+)
+
+On-Time Delivery % =
+DIVIDE([On-Time Trips], [Total Trips], 0)
+
+Fuel Efficiency (km/L) =
+DIVIDE(
+    SUM(Trip_Data[Distance_km]),
+    SUM(Trip_Data[Fuel_Consumed_L]),
+    0
+)
+
+Cost per km =
+AVERAGEX(
+    Trip_Data,
+    DIVIDE(
+        100 + RELATED(Vehicle_Master[Maintenance_Cost]),
+        Trip_Data[Distance_km],
+        0
+    )
+)
+
+Average Maintenance Cost =
+AVERAGE(Vehicle_Master[Maintenance_Cost])
+
+IMPORTANT DATASET LIMITATION:
+The supplied Trip_Data table does not contain delivery start/end timestamps or a delivery duration column. Therefore, the assignment's "Avg. Delivery Time" card cannot be calculated from the supplied fields without an additional source field. Do not invent a value; use a text note or ask the instructor for the missing field.
